@@ -26,5 +26,10 @@ lazy val scalaClient=project.in(file("scalaClient"))
       version := "1.0",
       scalaVersion := "2.12.1"
     )
+  .settings(libraryDependencies ++= Seq(
+    scalaj
+  ))
 
 lazy val akkaHttp = "com.typesafe.akka" %% "akka-http" % "10.0.1"
+
+lazy val scalaj= "org.scalaj" %% "scalaj-http" % "2.3.0"

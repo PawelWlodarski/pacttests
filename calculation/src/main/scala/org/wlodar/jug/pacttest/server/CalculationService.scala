@@ -1,4 +1,4 @@
-package org.wlodar.jug
+package org.wlodar.jug.pacttest.server
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http

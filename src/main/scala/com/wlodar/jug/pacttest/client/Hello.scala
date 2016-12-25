@@ -1,4 +1,4 @@
-package com.example
+package com.wlodar.jug.pacttest.client
 
 object Hello {
   def main(args: Array[String]): Unit = {
