@@ -1,13 +1,6 @@
-name := """pacttest"""
-
-version := "1.0"
-
-scalaVersion := "2.11.7"
 
 // Change this to another test framework if you prefer
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.4" % "test"
-
-
+//libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.4" % "test"
 
 lazy val calculationService = project.in(file("calculation"))
   .settings(
@@ -16,7 +9,8 @@ lazy val calculationService = project.in(file("calculation"))
     scalaVersion := "2.12.1"
   )
   .settings(libraryDependencies ++= Seq(
-    akkaHttp
+    akkaHttp,
+    logback
   ))
 
 
@@ -31,5 +25,6 @@ lazy val scalaClient=project.in(file("scalaClient"))
   ))
 
 lazy val akkaHttp = "com.typesafe.akka" %% "akka-http" % "10.0.1"
-
 lazy val scalaj= "org.scalaj" %% "scalaj-http" % "2.3.0"
+
+lazy val logback = "ch.qos.logback" % "logback-classic" % "1.1.8"
