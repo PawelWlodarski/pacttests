@@ -8,9 +8,15 @@ scalaVersion := "2.11.7"
 libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.4" % "test"
 
 
-lazy val calculationService=project.in(file("calculation"))
-  .settings(Seq(
+
+lazy val calculationService = project.in(file("calculation"))
+  .settings(
     name := """calculationService""",
     version := "1.0",
     scalaVersion := "2.12.1"
+  )
+  .settings(libraryDependencies ++= Seq(
+    akkaHttp
   ))
+
+lazy val akkaHttp = "com.typesafe.akka" %% "akka-http" % "10.0.1"
