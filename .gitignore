@@ -5,3 +5,9 @@
 /project/target/
 /target/
 /.idea/
+/calculation/pacts/
+calculation/pacts/
+calculation/target/
+scalaClient/target/
+/pacts/
+pacts/
