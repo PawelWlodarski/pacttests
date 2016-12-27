@@ -2,7 +2,6 @@ package org.wlodar.jug.pacttest.server
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.server.{Directives, Route}
 import akka.stream.ActorMaterializer
 import org.slf4j.LoggerFactory

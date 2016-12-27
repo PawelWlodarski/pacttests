@@ -15,7 +15,8 @@ lazy val calculationService = project.in(file("calculation"))
     scalaVersion := "2.12.1"
   )
   .settings(libraryDependencies ++= Seq(
-    akkaHttp
+    akkaHttp,
+    scalapact,scalatest
   ))
   .settings(commonDependencies)
 
