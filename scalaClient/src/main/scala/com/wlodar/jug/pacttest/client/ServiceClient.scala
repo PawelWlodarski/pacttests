@@ -18,4 +18,7 @@ object ServiceClient {
       .asString
 
 
+  def doc(baseUrl:String): HttpResponse[String] = Http(s"$baseUrl/doc").asString
+
+
 }

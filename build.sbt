@@ -1,9 +1,3 @@
-import com.itv.scalapact.plugin.ScalaPactPlugin
-// Change this to another test framework if you prefer
-
-
-
-
 val commonDependencies = libraryDependencies ++= Seq(
   slf4j, logback
 )
@@ -29,12 +23,13 @@ lazy val scalaClient = project.in(file("scalaClient"))
   )
   .settings(libraryDependencies ++= Seq(
     scalaj,
-    scalapact, scalatest
+    scalapact, scalatest , json4sNative
   ))
   .settings(commonDependencies)
 
 lazy val akkaHttp = "com.typesafe.akka" %% "akka-http" % "10.0.1"
 lazy val scalaj = "org.scalaj" %% "scalaj-http" % "2.3.0"
+lazy val json4sNative = "org.json4s" %% "json4s-native" % "3.5.0" % "test"
 
 lazy val logback = "ch.qos.logback" % "logback-classic" % "1.1.8"
 lazy val slf4j = "org.slf4j" % "slf4j-api" % "1.7.22"

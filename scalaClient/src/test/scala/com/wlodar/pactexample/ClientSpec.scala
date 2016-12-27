@@ -23,7 +23,7 @@ class ClientSpec extends FunSpec with Matchers {
           .willRespondWith(200, "simple result")
       ).runConsumerTest { config =>
 
-      val result: HttpResponse[String] =ServiceClient.simpleCall(config.baseUrl)
+      val result: HttpResponse[String] = ServiceClient.simpleCall(config.baseUrl)
 
 
       result.code shouldBe 200
@@ -33,37 +33,61 @@ class ClientSpec extends FunSpec with Matchers {
   }
 
   it("shows an example of a simple get with paremeters and headers") {
-      CustomForger.forge(
-        interaction
-          .description("example with parameters and headers")
-          .uponReceiving(
-            method = GET,
-            path="/sum",
-            query="a=2&b=3",
-            headers = Map("action"->"computation"),
-            body=None,
-            matchingRules = None)
-            .willRespondWith(200,"sum=5")
-      ).runConsumerTest{config =>
-          val result=ServiceClient.add(config.baseUrl)(2,3)
+    CustomForger.forge(
+      interaction
+        .description("example with parameters and headers")
+        .uponReceiving(
+          method = GET,
+          path = "/sum",
+          query = "a=2&b=3",
+          headers = Map("action" -> "computation"),
+          body = None,
+          matchingRules = None)
+        .willRespondWith(200, "sum=5")
+    ).runConsumerTest { config =>
+      val result = ServiceClient.add(config.baseUrl)(2, 3)
 
-          result.code shouldBe 200
-          result.body shouldBe "sum=5"
-      }
+      result.code shouldBe 200
+      result.body shouldBe "sum=5"
+    }
+
+  }
 
 
+  val doc = APIDoc("sum", Seq("a", "b"))
+
+  import org.json4s.native.Serialization._
+  import org.json4s.native.JsonParser
+  import org.json4s.DefaultFormats
+
+  private implicit val formats = DefaultFormats
+
+  it("show an example of json result") {
+    CustomForger.forge(
+      interaction.description("example with json result")
+        .uponReceiving("/doc")
+        .willRespondWith(200, Map("Content-Type" -> "application/json"), write(doc), None)
+    ).runConsumerTest{config =>
+        val result=ServiceClient.doc(config.baseUrl)
+
+      result.code shouldBe 200
+      JsonParser.parse(result.body).extract[APIDoc] shouldBe doc
+    }
   }
 
 
 }
 
-object CustomForger{
+case class APIDoc(path: String, params: Seq[String])
+
+object CustomForger {
+
   import com.itv.scalapact.ScalaPactForger._
   import com.itv.scalapact.ScalaPactForger.forgePact.ScalaPactDescription
 
   def forge(interaction: ScalaPactInteraction): ScalaPactDescription =
     forgePact
       .between("scala client").and("calculation service")
-        .addInteraction(interaction)
+      .addInteraction(interaction)
 
 }
