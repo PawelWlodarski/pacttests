@@ -7,8 +7,15 @@ import scalaj.http.{Http, HttpResponse}
   */
 object ServiceClient {
 
+  def simpleCall(baseUrl: String): HttpResponse[String] = Http(s"$baseUrl/simple").asString
 
 
-  def simpleCall(baseUrl:String):HttpResponse[String] = Http(s"$baseUrl/simple").asString
+  def add(baseUrl: String)(a: Int, b: Int): HttpResponse[String] =
+    Http(s"$baseUrl/sum")
+      .param("a", a.toString)
+      .param("b", b.toString)
+      .header("action", "computation")
+      .asString
+
 
 }
