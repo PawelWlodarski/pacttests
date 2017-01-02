@@ -9,7 +9,7 @@ lazy val calculationService = project.in(file("calculation"))
     scalaVersion := "2.12.1"
   )
   .settings(libraryDependencies ++= Seq(
-    akkaHttp,
+    akkaHttp,sprayJson,akkaXml,
     scalapact,scalatest
   ))
   .settings(commonDependencies)
@@ -28,6 +28,10 @@ lazy val scalaClient = project.in(file("scalaClient"))
   .settings(commonDependencies)
 
 lazy val akkaHttp = "com.typesafe.akka" %% "akka-http" % "10.0.1"
+lazy val sprayJson="com.typesafe.akka" %% "akka-http-spray-json" % "10.0.1"
+lazy val akkaXml="com.typesafe.akka" %% "akka-http-xml" % "10.0.1"
+lazy val xml="org.scala-lang.modules" %% "scala-xml" % "1.0.6"
+
 lazy val scalaj = "org.scalaj" %% "scalaj-http" % "2.3.0"
 lazy val json4sNative = "org.json4s" %% "json4s-native" % "3.5.0" % "test"
 
