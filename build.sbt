@@ -52,3 +52,17 @@ pactLocalCopy := {
   }
   streams.value.log.info(s"pact files copied to $destinationPath")
 }
+
+
+/// PACT BROKER - https://github.com/ehdez73/docker-pact-broker
+//pactBrokerAddress := "http://localhost"
+//pactContractVersion := "2.0.0"
+//
+
+//first example
+//providerName := "uslugaZewnetrzna"
+//consumerNames := Seq("tenTutajKonsument")
+
+//service client
+//providerName := "calculation service"
+//consumerNames := Seq("scala client")
