@@ -107,51 +107,63 @@ class ClientSpec extends FunSuite with Matchers {
         """.stripMargin
   }
 
-    test("use body matchers") {
-      CustomForger.forge(
-        interaction.description("body matchers")
-          .uponReceiving("/bodyMatchers")
-          .willRespondWith(
-            status = 200,
-            headers = Map(), //accept missing headers
-            body = Some(
+  test("use body matchers") {
+    CustomForger.forge(
+      interaction.description("body matchers")
+        .uponReceiving("/bodyMatchers")
+        .willRespondWith(
+          status = 200,
+          headers = Map(), //accept missing headers
+          body = Some(
 
-              """{
-                |"text" : "hello",
-                | "integerType" : 7,
-                | "collection" : ["one","two","three"]
-                |}""".stripMargin),
-            matchingRules = bodyRegexRule("text", "\\w+")
-              ~> bodyTypeRule("integerType")
-              ~> bodyArrayMinimumLengthRule("collection", 1))
-      ).runConsumerTest { config =>
-        val result = ServiceClient.call(config.baseUrl, "bodyMatchers")
+            """{
+              |"text" : "hello",
+              | "integerType" : 7,
+              | "collection" : ["one","two","three"]
+              |}""".stripMargin),
+          matchingRules = bodyRegexRule("text", "\\w+")
+            ~> bodyTypeRule("integerType")
+            ~> bodyArrayMinimumLengthRule("collection", 1))
+    ).runConsumerTest { config =>
+      val result = ServiceClient.call(config.baseUrl, "bodyMatchers")
 
-        JsonParser.parse(result.body).extract[JSonWithArray].collection should contain allOf("one","two","three")
-      }
+      JsonParser.parse(result.body).extract[JSonWithArray].collection should contain allOf("one", "two", "three")
     }
+  }
 
+  test("Using provider state") {
+    CustomForger.forge(
+      interaction
+        .description("using provider state")
+        .given("state666")
+        .uponReceiving("/providerState")
+        .willRespondWith(200)
+    ).runConsumerTest { config =>
+      val result = ServiceClient.call(config.baseUrl, "providerState")
 
-    //matchers
-    //provider state
+      result.code shouldBe 200
+    }
+  }
+
+  //provider state
 
 
 }
 
-  case class APIDoc(path: String, params: Seq[String])
+case class APIDoc(path: String, params: Seq[String])
 
-  case class Add(a: Int, b: Int)
+case class Add(a: Int, b: Int)
 
-  case class JSonWithArray(text:String,integerType:Int, collection: List[String])
+case class JSonWithArray(text: String, integerType: Int, collection: List[String])
 
-  object CustomForger {
+object CustomForger {
 
-    import com.itv.scalapact.ScalaPactForger._
-    import com.itv.scalapact.ScalaPactForger.forgePact.ScalaPactDescription
+  import com.itv.scalapact.ScalaPactForger._
+  import com.itv.scalapact.ScalaPactForger.forgePact.ScalaPactDescription
 
-    def forge(interaction: ScalaPactInteraction): ScalaPactDescription =
-      forgePact
-        .between("scala client").and("calculation service")
-        .addInteraction(interaction)
+  def forge(interaction: ScalaPactInteraction): ScalaPactDescription =
+    forgePact
+      .between("scala client").and("calculation service")
+      .addInteraction(interaction)
 
-  }
+}

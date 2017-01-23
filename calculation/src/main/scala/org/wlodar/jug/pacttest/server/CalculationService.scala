@@ -77,5 +77,11 @@ trait Services extends Directives {
       get {
         complete(JSonWithArray("somethingDifferent",69,List("four")))
       }
+    } ~
+    path("providerState") {
+      get{
+        complete("ok")
+      }
     }
+
 }
