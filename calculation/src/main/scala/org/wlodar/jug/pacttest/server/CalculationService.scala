@@ -38,6 +38,11 @@ trait Services extends Directives {
   implicit val AddFormat=jsonFormat2(Add)
 
   val route: Route =
+    path("apiUslugi"){
+      get{
+        complete("Pact działa!!!")  //fix
+      }
+    }
     path("simple") {
       get {
         complete("simple result")

@@ -7,6 +7,8 @@ import scalaj.http.{Http, HttpResponse}
   */
 object ServiceClient {
 
+  def call(baseUrl: String,path:String):HttpResponse[String]=Http(s"$baseUrl/$path").asString
+
   def simpleCall(baseUrl: String): HttpResponse[String] = Http(s"$baseUrl/simple").asString
 
 

@@ -46,6 +46,7 @@ val pactLocalCopy = taskKey[Unit]("copy pact to producer")
 pactLocalCopy := {
   val pactsFiles: PathFinder = (target.value / "pacts") * "*.json"
   val destinationPath = baseDirectory.value / "pacts"
+  destinationPath.listFiles().foreach(_.delete())
   pactsFiles.get.foreach { pact =>
     sbt.IO.copyFile(pact, (destinationPath / pact.getName))
   }

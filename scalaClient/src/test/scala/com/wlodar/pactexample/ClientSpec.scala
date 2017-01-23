@@ -12,7 +12,8 @@ class ClientSpec extends FunSpec with Matchers {
   val provider = "calculation service"
   val client = "scala client"
 
-  it("should create contract for simple get without parameters") {
+  //it
+  ignore("should create contract for simple get without parameters") {
     forgePact
       .between(client)
       .and(provider)
@@ -32,7 +33,7 @@ class ClientSpec extends FunSpec with Matchers {
 
   }
 
-  it("shows an example of a simple get with paremeters and headers") {
+  ignore("shows an example of a simple get with paremeters and headers") {
     CustomForger.forge(
       interaction
         .description("example with parameters and headers")
@@ -62,7 +63,7 @@ class ClientSpec extends FunSpec with Matchers {
 
   private implicit val formats = DefaultFormats
 
-  it("show an example of json result") {
+  ignore("show an example of json result") {
     CustomForger.forge(
       interaction.description("example with json result")
         .uponReceiving("/doc")
