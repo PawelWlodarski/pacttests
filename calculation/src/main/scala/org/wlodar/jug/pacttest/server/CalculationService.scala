@@ -42,13 +42,14 @@ trait Services extends Directives {
       get{
         complete("Pact działa!!!")  //fix
       }
-    }
+    } ~
     path("simple") {
       get {
         complete("simple result")
       }
     } ~
     path("sum") {
+      //http://localhost:11200/sum?a=5&b=7  -> missing header
       get {
         parameters('a.as[Int], 'b.as[Int]) { (a, b) =>
           headerValueByName("action"){header=>

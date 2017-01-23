@@ -1,11 +1,11 @@
 package com.wlodar.pactexample
 
 import com.wlodar.jug.pacttest.client.ServiceClient
-import org.scalatest.{FunSpec, Matchers}
+import org.scalatest.{FunSpec, FunSuite, Matchers}
 
 import scalaj.http.HttpResponse
 
-class ClientSpec extends FunSpec with Matchers {
+class ClientSpec extends FunSuite with Matchers {
 
   import com.itv.scalapact.ScalaPactForger._
 
@@ -13,7 +13,7 @@ class ClientSpec extends FunSpec with Matchers {
   val client = "scala client"
 
   //it
-  ignore("should create contract for simple get without parameters") {
+  test("should create contract for simple get without parameters") {
     forgePact
       .between(client)
       .and(provider)
@@ -33,7 +33,7 @@ class ClientSpec extends FunSpec with Matchers {
 
   }
 
-  ignore("shows an example of a simple get with paremeters and headers") {
+  test("shows an example of a simple get with paremeters and headers") {
     CustomForger.forge(
       interaction
         .description("example with parameters and headers")
@@ -46,7 +46,7 @@ class ClientSpec extends FunSpec with Matchers {
           matchingRules = None)
         .willRespondWith(200, "sum=5")
     ).runConsumerTest { config =>
-      val result = ServiceClient.add(config.baseUrl)(2, 3)
+      val result = ServiceClient.add(config.baseUrl)(2, 3)  //TEST : remove header
 
       result.code shouldBe 200
       result.body shouldBe "sum=5"
@@ -63,7 +63,7 @@ class ClientSpec extends FunSpec with Matchers {
 
   private implicit val formats = DefaultFormats
 
-  ignore("show an example of json result") {
+  test("show an example of json result") {
     CustomForger.forge(
       interaction.description("example with json result")
         .uponReceiving("/doc")
@@ -76,13 +76,35 @@ class ClientSpec extends FunSpec with Matchers {
     }
   }
 
-  //wysyla jsona / dostaje xml
+  val add=Add(2,7)
+
+  //{"a":1,"b":2} ; Content-Type : application/json
+  test("send json and receive xml"){
+    CustomForger.forge(
+      interaction.description("json in  -> xml out")
+        .uponReceiving(
+          method = POST,
+          path="/sum",
+          query = None,
+          headers = Map("Content-Type" -> "application/json"),
+          body=write(add),
+          None)
+        .willRespondWith(200, Map("Content-Type" -> "text/xml"), Some("<sum>9</sum>"),
+          headerRegexRule("Content-Type", "text/xml(.+)"))
+    ).runConsumerTest{config=>
+      val result=ServiceClient.addJson(config.baseUrl)(write(add))
+      result.body shouldBe "<sum>9</sum>"
+    }
+  }
+
+
   //matchers
   //provider state
 
 }
 
 case class APIDoc(path: String, params: Seq[String])
+case class Add(a:Int,b:Int)
 
 object CustomForger {
 

@@ -40,13 +40,13 @@ lazy val slf4j = "org.slf4j" % "slf4j-api" % "1.7.22"
 
 lazy val scalapact = "com.itv" %% "scalapact-scalatest" % "2.1.0" % "test"
 lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.1" % "test"
-
+libraryDependencies += scalatest
 val pactLocalCopy = taskKey[Unit]("copy pact to producer")
 
 pactLocalCopy := {
   val pactsFiles: PathFinder = (target.value / "pacts") * "*.json"
   val destinationPath = baseDirectory.value / "pacts"
-  destinationPath.listFiles().foreach(_.delete())
+  if(destinationPath.exists()) destinationPath.listFiles().foreach(_.delete())
   pactsFiles.get.foreach { pact =>
     sbt.IO.copyFile(pact, (destinationPath / pact.getName))
   }

@@ -19,6 +19,9 @@ object ServiceClient {
       .header("action", "computation")
       .asString
 
+  def addJson(baseUrl: String)(body:String):HttpResponse[String]=Http(s"$baseUrl/sum")
+    .header("Content-Type","application/json")
+    .postData(body).asString
 
   def doc(baseUrl:String): HttpResponse[String] = Http(s"$baseUrl/doc").asString
 
