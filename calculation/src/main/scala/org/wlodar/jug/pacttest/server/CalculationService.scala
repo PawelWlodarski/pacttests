@@ -25,7 +25,7 @@ object CalculationService extends App with Services {
 
 case class APIDoc(path: String, params: Seq[String])
 case class Add(a:Int,b:Int)
-
+case class JSonWithArray(text:String,integerType:Int, collection: List[String])
 trait Services extends Directives {
 
   import akka.http.scaladsl.model.StatusCodes._
@@ -36,6 +36,8 @@ trait Services extends Directives {
 
   implicit val APIDocFormat=jsonFormat2(APIDoc)
   implicit val AddFormat=jsonFormat2(Add)
+  implicit val MatchingBodyFormat=jsonFormat3(JSonWithArray)
+
 
   val route: Route =
     path("apiUslugi"){
@@ -69,6 +71,11 @@ trait Services extends Directives {
     path("doc") {
       get{
         complete(APIDoc("sum", Seq("a", "b")))
+      }
+    } ~
+    path("bodyMatchers") {
+      get {
+        complete(JSonWithArray("somethingDifferent",69,List("four")))
       }
     }
 }

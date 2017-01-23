@@ -46,7 +46,7 @@ class ClientSpec extends FunSuite with Matchers {
           matchingRules = None)
         .willRespondWith(200, "sum=5")
     ).runConsumerTest { config =>
-      val result = ServiceClient.add(config.baseUrl)(2, 3)  //TEST : remove header
+      val result = ServiceClient.add(config.baseUrl)(2, 3) //TEST : remove header
 
       result.code shouldBe 200
       result.body shouldBe "sum=5"
@@ -68,52 +68,90 @@ class ClientSpec extends FunSuite with Matchers {
       interaction.description("example with json result")
         .uponReceiving("/doc")
         .willRespondWith(200, Map("Content-Type" -> "application/json"), write(doc), None)
-    ).runConsumerTest{config =>
-        val result=ServiceClient.doc(config.baseUrl)
+    ).runConsumerTest { config =>
+      val result = ServiceClient.doc(config.baseUrl)
 
       result.code shouldBe 200
       JsonParser.parse(result.body).extract[APIDoc] shouldBe doc
     }
   }
 
-  val add=Add(2,7)
+  val add = Add(2, 7)
 
   //{"a":1,"b":2} ; Content-Type : application/json
-  test("send json and receive xml"){
+  test("send json and receive xml") {
     CustomForger.forge(
       interaction.description("json in  -> xml out")
         .uponReceiving(
           method = POST,
-          path="/sum",
+          path = "/sum",
           query = None,
           headers = Map("Content-Type" -> "application/json"),
-          body=write(add),
+          body = write(add),
           None)
         .willRespondWith(200, Map("Content-Type" -> "text/xml"), Some("<sum>9</sum>"),
           headerRegexRule("Content-Type", "text/xml(.+)"))
-    ).runConsumerTest{config=>
-      val result=ServiceClient.addJson(config.baseUrl)(write(add))
+    ).runConsumerTest { config =>
+      val result = ServiceClient.addJson(config.baseUrl)(write(add))
       result.body shouldBe "<sum>9</sum>"
     }
   }
 
+  val json: String => Int => List[String] => String = text => someInteger => values => {
+    s"""
+       |{
+       |  "text" : "$text",
+       |  "integerType" : $someInteger,
+       |  "collection" : [${values.map(s => "\"" + s + "\"").mkString(", ")}]
+       |}
+        """.stripMargin
+  }
 
-  //matchers
-  //provider state
+    test("use body matchers") {
+      CustomForger.forge(
+        interaction.description("body matchers")
+          .uponReceiving("/bodyMatchers")
+          .willRespondWith(
+            status = 200,
+            headers = Map(), //accept missing headers
+            body = Some(
+
+              """{
+                |"text" : "hello",
+                | "integerType" : 7,
+                | "collection" : ["one","two","three"]
+                |}""".stripMargin),
+            matchingRules = bodyRegexRule("text", "\\w+")
+              ~> bodyTypeRule("integerType")
+              ~> bodyArrayMinimumLengthRule("collection", 1))
+      ).runConsumerTest { config =>
+        val result = ServiceClient.call(config.baseUrl, "bodyMatchers")
+
+        JsonParser.parse(result.body).extract[JSonWithArray].collection should contain allOf("one","two","three")
+      }
+    }
+
+
+    //matchers
+    //provider state
+
 
 }
 
-case class APIDoc(path: String, params: Seq[String])
-case class Add(a:Int,b:Int)
+  case class APIDoc(path: String, params: Seq[String])
 
-object CustomForger {
+  case class Add(a: Int, b: Int)
 
-  import com.itv.scalapact.ScalaPactForger._
-  import com.itv.scalapact.ScalaPactForger.forgePact.ScalaPactDescription
+  case class JSonWithArray(text:String,integerType:Int, collection: List[String])
 
-  def forge(interaction: ScalaPactInteraction): ScalaPactDescription =
-    forgePact
-      .between("scala client").and("calculation service")
-      .addInteraction(interaction)
+  object CustomForger {
 
-}
+    import com.itv.scalapact.ScalaPactForger._
+    import com.itv.scalapact.ScalaPactForger.forgePact.ScalaPactDescription
+
+    def forge(interaction: ScalaPactInteraction): ScalaPactDescription =
+      forgePact
+        .between("scala client").and("calculation service")
+        .addInteraction(interaction)
+
+  }
