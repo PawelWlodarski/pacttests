@@ -1,15 +1,15 @@
 package com.wlodar.pactexample.first
 
 import com.wlodar.jug.pacttest.client.ServiceClient
-import org.scalatest.{FunSpec, Matchers}
+import org.scalatest.{FunSpec, FunSuite, Matchers}
 
 import scalaj.http.HttpResponse
 
-class FirstPactExample extends FunSpec with Matchers {
+class FirstPactExample extends FunSuite with Matchers {
 
   import com.itv.scalapact.ScalaPactForger._
 
-  describe("Pierwszy przykład na demo") {
+  test("Pierwszy przykład na demo") {
     forgePact
       .between("tenTutajKonsument")
       .and("uslugaZewnetrzna")

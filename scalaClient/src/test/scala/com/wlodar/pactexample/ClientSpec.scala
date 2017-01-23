@@ -76,6 +76,9 @@ class ClientSpec extends FunSpec with Matchers {
     }
   }
 
+  //wysyla jsona / dostaje xml
+  //matchers
+  //provider state
 
 }
 
