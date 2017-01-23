@@ -42,7 +42,7 @@ trait Services extends Directives {
   val route: Route =
     path("apiUslugi"){
       get{
-        complete("Pact działa!!!")  //fix
+        complete("dupa")  //fix
       }
     } ~
     path("simple") {

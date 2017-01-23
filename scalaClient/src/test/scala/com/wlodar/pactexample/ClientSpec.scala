@@ -13,7 +13,7 @@ class ClientSpec extends FunSuite with Matchers {
   val client = "scala client"
 
   //it
-  test("should create contract for simple get without parameters") {
+  ignore("should create contract for simple get without parameters") {
     forgePact
       .between(client)
       .and(provider)
@@ -33,7 +33,7 @@ class ClientSpec extends FunSuite with Matchers {
 
   }
 
-  test("shows an example of a simple get with paremeters and headers") {
+  ignore("shows an example of a simple get with paremeters and headers") {
     CustomForger.forge(
       interaction
         .description("example with parameters and headers")
@@ -63,7 +63,7 @@ class ClientSpec extends FunSuite with Matchers {
 
   private implicit val formats = DefaultFormats
 
-  test("show an example of json result") {
+  ignore("show an example of json result") {
     CustomForger.forge(
       interaction.description("example with json result")
         .uponReceiving("/doc")
@@ -79,7 +79,7 @@ class ClientSpec extends FunSuite with Matchers {
   val add = Add(2, 7)
 
   //{"a":1,"b":2} ; Content-Type : application/json
-  test("send json and receive xml") {
+  ignore("send json and receive xml") {
     CustomForger.forge(
       interaction.description("json in  -> xml out")
         .uponReceiving(
@@ -107,7 +107,7 @@ class ClientSpec extends FunSuite with Matchers {
         """.stripMargin
   }
 
-  test("use body matchers") {
+  ignore("use body matchers") {
     CustomForger.forge(
       interaction.description("body matchers")
         .uponReceiving("/bodyMatchers")
@@ -131,7 +131,7 @@ class ClientSpec extends FunSuite with Matchers {
     }
   }
 
-  test("Using provider state") {
+  ignore("Using provider state") {
     CustomForger.forge(
       interaction
         .description("using provider state")
