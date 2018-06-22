@@ -8,6 +8,8 @@ import scalaj.http.HttpResponse
 class ClientSpec extends FunSuite with Matchers {
 
   import com.itv.scalapact.ScalaPactForger._
+  import com.itv.scalapact.circe09._
+  import com.itv.scalapact.http4s18._
 
   val provider = "calculation service"
   val client = "scala client"
@@ -40,7 +42,7 @@ class ClientSpec extends FunSuite with Matchers {
         .uponReceiving(
           method = GET,
           path = "/sum",
-          query = "a=2&b=3",
+          query = Some("a=2&b=3"),
           headers = Map("action" -> "computation"),
           body = None,
           matchingRules = None)
@@ -67,7 +69,7 @@ class ClientSpec extends FunSuite with Matchers {
     CustomForger.forge(
       interaction.description("example with json result")
         .uponReceiving("/doc")
-        .willRespondWith(200, Map("Content-Type" -> "application/json"), write(doc), None)
+        .willRespondWith(200, Map("Content-Type" -> "application/json"), Some(write(doc)), None)
     ).runConsumerTest { config =>
       val result = ServiceClient.doc(config.baseUrl)
 
@@ -87,7 +89,7 @@ class ClientSpec extends FunSuite with Matchers {
           path = "/sum",
           query = None,
           headers = Map("Content-Type" -> "application/json"),
-          body = write(add),
+          body = Some(write(add)),
           None)
         .willRespondWith(200, Map("Content-Type" -> "text/xml"), Some("<sum>9</sum>"),
           headerRegexRule("Content-Type", "text/xml(.+)"))

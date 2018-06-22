@@ -8,6 +8,8 @@ import scalaj.http.HttpResponse
 class FirstPactExample extends FunSuite with Matchers {
 
   import com.itv.scalapact.ScalaPactForger._
+  import com.itv.scalapact.circe09._
+  import com.itv.scalapact.http4s18._
 
   test("Pierwszy przykład na demo") {
     forgePact
@@ -22,7 +24,7 @@ class FirstPactExample extends FunSuite with Matchers {
 
       //pokazać kod
       val result: HttpResponse[String] =ServiceClient.call(config.baseUrl,"apiUslugi")
-
+      println(result)
       result.code shouldBe 200
       result.body shouldBe "Pact działa!!!"
 //      result.body shouldBe "Błąd"

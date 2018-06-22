@@ -28,11 +28,10 @@ case class Add(a:Int,b:Int)
 case class JSonWithArray(text:String,integerType:Int, collection: List[String])
 trait Services extends Directives {
 
-  import akka.http.scaladsl.model.StatusCodes._
   import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-  import spray.json.DefaultJsonProtocol._
-
   import akka.http.scaladsl.marshallers.xml.ScalaXmlSupport._
+  import akka.http.scaladsl.model.StatusCodes._
+  import spray.json.DefaultJsonProtocol._
 
   implicit val APIDocFormat=jsonFormat2(APIDoc)
   implicit val AddFormat=jsonFormat2(Add)
