@@ -1,0 +1,125 @@
+{
+  "provider" : {
+    "name" : "calculation service"
+  },
+  "consumer" : {
+    "name" : "scala client"
+  },
+  "interactions" : [
+    {
+      "providerState" : "state666",
+      "description" : "using provider state",
+      "request" : {
+        "method" : "GET",
+        "path" : "/providerState"
+      },
+      "response" : {
+        "status" : 200
+      }
+    },
+    {
+      "description" : "json in  -> xml out",
+      "request" : {
+        "method" : "POST",
+        "body" : {
+          "a" : 2,
+          "b" : 7
+        },
+        "path" : "/sum",
+        "headers" : {
+          "Content-Type" : "application/json"
+        }
+      },
+      "response" : {
+        "status" : 200,
+        "headers" : {
+          "Content-Type" : "text/xml"
+        },
+        "body" : "<sum>9</sum>",
+        "matchingRules" : {
+          "$.headers.Content-Type" : {
+            "match" : "regex",
+            "regex" : "text/xml(.+)"
+          }
+        }
+      }
+    },
+    {
+      "description" : "example with json result",
+      "request" : {
+        "method" : "GET",
+        "path" : "/doc"
+      },
+      "response" : {
+        "status" : 200,
+        "headers" : {
+          "Content-Type" : "application/json"
+        },
+        "body" : {
+          "path" : "sum",
+          "params" : [
+            "a",
+            "b"
+          ]
+        }
+      }
+    },
+    {
+      "description" : "body matchers",
+      "request" : {
+        "method" : "GET",
+        "path" : "/bodyMatchers"
+      },
+      "response" : {
+        "status" : 200,
+        "body" : {
+          "text" : "hello",
+          "integerType" : 7,
+          "collection" : [
+            "one",
+            "two",
+            "three"
+          ]
+        },
+        "matchingRules" : {
+          "$.body.text" : {
+            "match" : "regex",
+            "regex" : "\\w+"
+          },
+          "$.body.integerType" : {
+            "match" : "type"
+          },
+          "$.body.collection" : {
+            "min" : 1
+          }
+        }
+      }
+    },
+    {
+      "description" : "simple example",
+      "request" : {
+        "method" : "GET",
+        "path" : "/simple"
+      },
+      "response" : {
+        "status" : 200,
+        "body" : "simple result"
+      }
+    },
+    {
+      "description" : "example with parameters and headers",
+      "request" : {
+        "method" : "GET",
+        "path" : "/sum",
+        "query" : "a=2&b=3",
+        "headers" : {
+          "action" : "computation"
+        }
+      },
+      "response" : {
+        "status" : 200,
+        "body" : "sum=5"
+      }
+    }
+  ]
+}

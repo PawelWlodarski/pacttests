@@ -38,7 +38,7 @@ lazy val json4sNative = "org.json4s" %% "json4s-native" % "3.5.0" % "test"
 lazy val logback = "ch.qos.logback" % "logback-classic" % "1.1.8"
 lazy val slf4j = "org.slf4j" % "slf4j-api" % "1.7.22"
 
-lazy val scalapact = "com.itv" %% "scalapact-scalatest" % "2.1.0" % "test"
+lazy val scalapact = "com.itv" %% "scalapact-scalatest" % "2.3.0-RC1" % "test"
 lazy val scalatest = "org.scalatest" %% "scalatest" % "3.0.1" % "test"
 libraryDependencies += scalatest
 val pactLocalCopy = taskKey[Unit]("copy pact to producer")

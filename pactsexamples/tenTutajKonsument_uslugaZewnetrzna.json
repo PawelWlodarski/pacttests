@@ -1,0 +1,21 @@
+{
+  "provider" : {
+    "name" : "uslugaZewnetrzna"
+  },
+  "consumer" : {
+    "name" : "tenTutajKonsument"
+  },
+  "interactions" : [
+    {
+      "description" : "Prosty get bez parametrów",
+      "request" : {
+        "method" : "GET",
+        "path" : "/apiUslugi"
+      },
+      "response" : {
+        "status" : 200,
+        "body" : "Pact działa!!!"
+      }
+    }
+  ]
+}
