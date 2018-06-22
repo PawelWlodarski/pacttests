@@ -1,2 +1,2 @@
 #!/bin/bash
-sbt -Dlogback.configurationFile=project/logback.xml "pact-verify --source pacts/ --host localhost --port 11200"
+sbt -Dlogback.configurationFile=project/logback.xml "pactVerify --source pacts/ --host localhost --port 11200"

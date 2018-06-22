@@ -1,3 +1,3 @@
 #!/bin/bash
-sbt "pact-test"
+sbt "pactTest"
 sbt "pactLocalCopy"
